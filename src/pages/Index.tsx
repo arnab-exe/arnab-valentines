@@ -16,13 +16,14 @@ const CONFIG = {
   dateEventName: "Valentine's Date 💕",
 };
 
-const buildGoogleCalendarUrl = (date: Date) => {
+const buildGoogleCalendarUrl = (date: Date, spot: string) => {
   const dateStr = format(date, "yyyyMMdd");
   const params = new URLSearchParams({
     action: "TEMPLATE",
     text: CONFIG.dateEventName,
     dates: `${dateStr}/${dateStr}`,
     details: "Our special Valentine's date! ❤️",
+    ...(spot && { location: spot }),
   });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 };
@@ -50,6 +51,7 @@ const FloatingHearts = () => (
 const Index = () => {
   const [accepted, setAccepted] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>();
+  const [favoriteSpot, setFavoriteSpot] = useState("");
   const noBtnRef = useRef<HTMLButtonElement>(null);
 
   const dodgeNo = useCallback(() => {
@@ -122,13 +124,32 @@ const Index = () => {
               </Popover>
             </div>
 
+            {/* Favorite Spot Input */}
+            <div className="flex flex-col items-center gap-2">
+              <label
+                className="text-primary text-sm"
+                style={{ fontFamily: "var(--font-retro)", fontSize: "10px" }}
+              >
+                Choose your favourite spot 📍
+              </label>
+              <input
+                type="text"
+                value={favoriteSpot}
+                onChange={(e) => setFavoriteSpot(e.target.value)}
+                placeholder="e.g. That cute café downtown..."
+                className="w-[260px] px-4 py-2 rounded-lg border border-primary/30 bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-ring"
+                style={{ fontFamily: "var(--font-body)" }}
+              />
+            </div>
+
             {selectedDate && (
               <div className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <p className="text-foreground text-lg">
                   It's a date! 🥰 <strong>{format(selectedDate, "MMMM do, yyyy")}</strong>
+                  {favoriteSpot && <> at <strong>{favoriteSpot}</strong></>}
                 </p>
                 <a
-                  href={buildGoogleCalendarUrl(selectedDate)}
+                  href={buildGoogleCalendarUrl(selectedDate, favoriteSpot)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-lg"
