@@ -3,9 +3,9 @@ import { useState, useCallback, useRef } from "react";
 // ✏️ CUSTOMISE THESE:
 const CONFIG = {
   question: "Hello, Ms. Sapna Ray. Will you be my Valentine? 💕",
-  yesMessage: "Yaaay! I knew you'd say yes! 🥰",
-  yesSubMessage: "You just made me the happiest person ever! ❤️",
-  fromName: "Your Secret Admirer",
+  yesMessage: "Thank you for making me the happiest person in the world",
+  yesSubMessage: "I love you! ❤️",
+  fromName: "Yours ArryBear",
 };
 
 const HEARTS = ["❤️", "💖", "💗", "💓", "💕", "💘", "💝", "♥️"];
