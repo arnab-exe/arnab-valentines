@@ -16,6 +16,21 @@ const CONFIG = {
   dateEventName: "Valentine's Date 💕",
 };
 
+// 📸 YOUR IMAGES (Exact filenames from the public folder)
+const USER_IMAGES = [
+  "/20241225_175846.jpg",
+  "/20250224_152223.jpg",
+  "/20251123_181709.jpg",
+  "/20251227_173550.jpg",
+  "/IMG-20250417-WA0019.jpg",
+  "/IMG-20250724-WA0013.jpg",
+  "/IMG-20251002-WA0135.jpg",
+  "/IMG-20251113-WA0018.jpg",
+  "/IMG-20260112-WA0035.jpg",
+  "/Picsart_25-10-29_00-09-38-225.jpg",
+  "/VideoCapture_20240925-004402.jpg",
+];
+
 const buildGoogleCalendarUrl = (date: Date, spot: string) => {
   const dateStr = format(date, "yyyyMMdd");
   const params = new URLSearchParams({
@@ -28,22 +43,29 @@ const buildGoogleCalendarUrl = (date: Date, spot: string) => {
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 };
 
-const HEARTS = ["❤️", "💖", "💗", "💓", "💕", "💘", "💝", "♥️"];
-
-const FloatingHearts = () => (
+// 🖼️ New component to float images instead of hearts
+const FloatingImages = () => (
   <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-    {Array.from({ length: 15 }).map((_, i) => (
-      <span
+    {USER_IMAGES.map((src, i) => (
+      <div
         key={i}
-        className="absolute animate-float-heart text-2xl md:text-3xl select-none"
+        // Keep the same float animation container
+        className="absolute animate-float-heart select-none"
         style={{
           left: `${Math.random() * 100}%`,
-          animationDuration: `${6 + Math.random() * 8}s`,
-          animationDelay: `${Math.random() * 10}s`,
+          // Make photos float a little slower than the hearts did
+          animationDuration: `${8 + Math.random() * 10}s`,
+          animationDelay: `${Math.random() * -15}s`,
         }}
       >
-        {HEARTS[i % HEARTS.length]}
-      </span> //lol
+        <img
+          src={src}
+          alt="Memory"
+          // w-8 h-8 make them similar size to the original heart emojis.
+          // aspect-square and object-cover ensure they are perfect square crops.
+          className="w-8 h-8 md:w-10 md:h-10 aspect-square object-cover rounded-md opacity-85 shadow-sm"
+        />
+      </div>
     ))}
   </div>
 );
@@ -69,7 +91,8 @@ const Index = () => {
   if (accepted) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background relative overflow-hidden px-4">
-        <FloatingHearts />
+        {/* Replaced FloatingHearts with FloatingImages */}
+        <FloatingImages />
         <div className="relative z-10 text-center space-y-6 max-w-md">
           <span className="text-7xl md:text-8xl block animate-pulse-heart">💖</span>
           <h1
@@ -169,7 +192,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background relative overflow-hidden px-4">
-      <FloatingHearts />
+      {/* Replaced FloatingHearts with FloatingImages */}
+      <FloatingImages />
       <div className="relative z-10 text-center space-y-8 max-w-lg">
         <span className="text-6xl md:text-7xl block animate-pulse-heart">💘</span>
         <h1
