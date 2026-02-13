@@ -136,7 +136,7 @@ const Index = () => {
                 type="text"
                 value={favoriteSpot}
                 onChange={(e) => setFavoriteSpot(e.target.value)}
-                placeholder="e.g. That cute café downtown..."
+                placeholder="Choose your favourite spot "
                 className="w-[260px] px-4 py-2 rounded-lg border border-primary/30 bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-ring"
                 style={{ fontFamily: "var(--font-body)" }}
               />
