@@ -1,4 +1,10 @@
 import { useState, useCallback, useRef } from "react";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // ✏️ CUSTOMISE THESE:
 const CONFIG = {
@@ -6,6 +12,19 @@ const CONFIG = {
   yesMessage: "Thank you for making me the happiest person in the world",
   yesSubMessage: "I love you! ❤️",
   fromName: "Yours ArryBear",
+  dateTitle: "Our Next Date 💑",
+  dateEventName: "Valentine's Date 💕",
+};
+
+const buildGoogleCalendarUrl = (date: Date) => {
+  const dateStr = format(date, "yyyyMMdd");
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: CONFIG.dateEventName,
+    dates: `${dateStr}/${dateStr}`,
+    details: "Our special Valentine's date! ❤️",
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
 };
 
 const HEARTS = ["❤️", "💖", "💗", "💓", "💕", "💘", "💝", "♥️"];
@@ -30,6 +49,7 @@ const FloatingHearts = () => (
 
 const Index = () => {
   const [accepted, setAccepted] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date>();
   const noBtnRef = useRef<HTMLButtonElement>(null);
 
   const dodgeNo = useCallback(() => {
@@ -64,6 +84,62 @@ const Index = () => {
               </span>
             ))}
           </div>
+
+          {/* Date Picker Section */}
+          <div className="pt-6 space-y-4">
+            <h2
+              className="text-lg md:text-xl text-primary"
+              style={{ fontFamily: "var(--font-retro)", fontSize: "12px" }}
+            >
+              {CONFIG.dateTitle}
+            </h2>
+            <p className="text-muted-foreground text-base">Pick a spot on the calendar for our next date!</p>
+            <div className="flex justify-center">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-[260px] justify-start text-left font-normal border-primary/30 hover:border-primary",
+                      !selectedDate && "text-muted-foreground"
+                    )}
+                    style={{ fontFamily: "var(--font-body)" }}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
+                    {selectedDate ? format(selectedDate, "PPP") : "Pick our date 💕"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="center">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={setSelectedDate}
+                    disabled={(date) => date < new Date()}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {selectedDate && (
+              <div className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <p className="text-foreground text-lg">
+                  It's a date! 🥰 <strong>{format(selectedDate, "MMMM do, yyyy")}</strong>
+                </p>
+                <a
+                  href={buildGoogleCalendarUrl(selectedDate)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-lg"
+                  style={{ fontFamily: "var(--font-retro)", fontSize: "10px" }}
+                >
+                  📅 Add to Calendar
+                </a>
+              </div>
+            )}
+          </div>
+
           <p className="text-muted-foreground text-lg italic pt-4">— {CONFIG.fromName}</p>
         </div>
       </div>
