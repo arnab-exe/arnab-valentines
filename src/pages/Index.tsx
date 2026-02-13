@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from "react";
 
 // ✏️ CUSTOMISE THESE:
 const CONFIG = {
-  question: "Will you be my Valentine? 💕",
+  question: "Hello, Ms. Sapna Ray. Will you be my Valentine? 💕",
   yesMessage: "Yaaay! I knew you'd say yes! 🥰",
   yesSubMessage: "You just made me the happiest person ever! ❤️",
   fromName: "Your Secret Admirer",
@@ -23,7 +23,7 @@ const FloatingHearts = () => (
         }}
       >
         {HEARTS[i % HEARTS.length]}
-      </span>
+      </span> //lol
     ))}
   </div>
 );
